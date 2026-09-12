@@ -182,6 +182,16 @@ jobs:
           echo "PATH Variable: $PATH"
           make ${{ env.args }} ${{ env.DEFCONFIG_NAME }}
 
+      - name: "Fix stack protector check"
+        working-directory: ${{ env.KERNEL_NAME }}
+        run: |
+          # The kernel's prepare-compiler-check fails because proton-clang doesn't support -fstack-protector-strong
+          # Patch the Makefile to skip this check or use -fstack-protector instead
+          sed -i 's/CONFIG_CC_STACKPROTECTOR_STRONG/CONFIG_CC_STACKPROTECTOR/' Makefile
+          # Also patch the prepare-compiler-check to not fail on stack protector strong
+          sed -i '/stackp-flag := -fstack-protector-strong/s/-fstack-protector-strong/-fstack-protector/' Makefile
+          sed -i '/stackp-name := STRONG/s/STRONG//' Makefile
+
       - name: "Build kernel"
         working-directory: ${{ env.KERNEL_NAME }}
         env:
