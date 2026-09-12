@@ -140,6 +140,24 @@ jobs:
           echo "PATH Variable: $PATH"
           make ${{ env.args }} ${{ env.DEFCONFIG_NAME }}
 
+      - name: "🔧 Fix clang compat"
+        working-directory: ${{ env.KERNEL_NAME }}
+        env:
+          args: ${{ steps.generate-args.outputs.args }}
+          arch: ${{ steps.generate-args.outputs.ARCH }}
+        run: |
+          # Disable stack protector strong (not supported by clang)
+          sed -i 's/CONFIG_CC_STACKPROTECTOR_STRONG=y/# CONFIG_CC_STACKPROTECTOR_STRONG is not set/' .config
+          # Enable stack protector regular
+          sed -i 's/# CONFIG_CC_STACKPROTECTOR is not set/CONFIG_CC_STACKPROTECTOR=y/' .config
+          # Disable LTO if present (can cause issues)
+          sed -i 's/CONFIG_LTO=y/# CONFIG_LTO is not set/' .config
+          sed -i 's/CONFIG_THINLTO=y/# CONFIG_THINLTO is not set/' .config
+          # Disable CFI if present
+          sed -i 's/CONFIG_CFI_CLANG=y/# CONFIG_CFI_CLANG is not set/' .config
+          # Re-run oldconfig to resolve dependencies
+          make ${{ env.args }} olddefconfig
+
       - name: "🎶 Build kernel"
         working-directory: ${{ env.KERNEL_NAME }}
         env:
