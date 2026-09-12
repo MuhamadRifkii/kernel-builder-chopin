@@ -1,9 +1,9 @@
 [
   {
     "kernelSource": {
-      "name": "Xiaomi_Kernel_OpenSource-chopin-r-oss",
-      "repo": "https://github.com/MiCode/Xiaomi_Kernel_OpenSource",
-      "branch": "chopin-r-oss",
+      "name": "android_kernel_chopin_android_T",
+      "repo": "https://github.com/ChopinKernels/android_kernel_chopin_android_T",
+      "branch": "main",
       "device": "chopin",
       "defconfig": "chopin_user_defconfig"
     },
