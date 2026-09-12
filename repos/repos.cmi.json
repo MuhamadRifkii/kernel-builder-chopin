@@ -33,7 +33,9 @@
         "STRIP": "llvm-strip",
         "LDGOLD": "aarch64-linux-gnu-ld.gold",
         "LLVM_AR": "llvm-ar",
-        "LLVM_DIS": "llvm-dis"
+        "LLVM_DIS": "llvm-dis",
+        "AS": "llvm-as",
+        "HOSTAS": "llvm-as"
       }
     },
     "AnyKernel3": {
