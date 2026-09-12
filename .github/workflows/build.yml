@@ -192,6 +192,13 @@ jobs:
           sed -i '/stackp-flag := -fstack-protector-strong/s/-fstack-protector-strong/-fstack-protector/' Makefile
           sed -i '/stackp-name := STRONG/s/STRONG//' Makefile
 
+      - name: "Fix assembler (use llvm-as instead of binutils as)"
+        working-directory: ${{ env.KERNEL_NAME }}
+        run: |
+          # Kernel Makefile hardcodes AS = $(CROSS_COMPILE)as which uses proton-clang's binutils as
+          # that doesn't support -EL flag. Override to use llvm-as
+          sed -i 's/^AS\t= $(CROSS_COMPILE)as/AS = llvm-as/' Makefile
+
       - name: "Build kernel"
         working-directory: ${{ env.KERNEL_NAME }}
         env:
