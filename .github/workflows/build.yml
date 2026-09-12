@@ -141,7 +141,7 @@ jobs:
           make ${{ env.args }} ${{ env.DEFCONFIG_NAME }}
 
       - name: "🔧 Fix clang compat"
-        working-directory: ${{ env.KERNEL_NAME }}
+        working-directory: ${{ env.OUT_DIR }}
         env:
           args: ${{ steps.generate-args.outputs.args }}
           arch: ${{ steps.generate-args.outputs.ARCH }}
